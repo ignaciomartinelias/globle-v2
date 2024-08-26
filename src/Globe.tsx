@@ -9,6 +9,15 @@ import {
   calculateLongestDistanceWithinACountry,
 } from "./utils";
 import { centroid } from "@turf/turf";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "./components/ui/command";
+import { motion } from "framer-motion";
 
 const MAX_DISTANCE_BETWEEN_COUNTRIES = 20000;
 const MAX_LONGEST_DISTANCE = 8000;
@@ -30,8 +39,8 @@ colorScale.domain([MAX_DISTANCE_BETWEEN_COUNTRIES, 0]);
 export const Globe = () => {
   const ref = React.useRef<GlobeMethods>();
 
-  const [text, setText] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
 
   const { data: worldGeoData } = useQuery({
     queryKey: ["worldGeoData"],
@@ -61,51 +70,58 @@ export const Globe = () => {
     );
   };
 
+  const onSelect = (countryName: string) => {
+    const country = worldGeoData.features.find(
+      (feature) => feature.properties.name === countryName
+    );
+
+    if (country && ref.current) {
+      const countryCentroid = centroid(country);
+
+      const countryLongestDistance =
+        calculateLongestDistanceWithinACountry(country);
+
+      const cartesianCoords = ref.current.getCoords(
+        countryCentroid.geometry.coordinates[1],
+        countryCentroid.geometry.coordinates[0],
+        calculateAltitude(countryLongestDistance)
+      );
+
+      const geoCoords = ref.current.toGeoCoords(cartesianCoords);
+
+      ref.current.pointOfView(geoCoords, 700);
+
+      setGuesses((prev) => [...prev, countryName]);
+      setSearch("");
+    }
+  };
+
   return (
     <div className="h-dvh relative">
-      <div className="flex gap-2 fixed left-4 top-4 p-4 bg-white z-10 rounded">
-        <input
-          type="text"
-          onChange={(e) => setText(e.target.value)}
-          value={text}
-          className="border"
-        />
-        <button
-          className="bg-indigo-400 text-white p-2 rounded"
-          onClick={() => {
-            const country = worldGeoData.features.find(
-              (feature) => feature.properties.name === text
-            );
+      <div className="flex fixed left-4 top-4 p-2 bg-white z-10 rounded">
+        <Command className="w-64" loop>
+          <CommandInput
+            placeholder="Search for country"
+            value={search}
+            onValueChange={setSearch}
+          />
 
-            if (country && ref.current) {
-              const countryCentroid = centroid(country);
-
-              const countryLongestDistance =
-                calculateLongestDistanceWithinACountry(country);
-
-              const cartesianCoords = ref.current.getCoords(
-                countryCentroid.geometry.coordinates[1],
-                countryCentroid.geometry.coordinates[0],
-                calculateAltitude(countryLongestDistance)
-              );
-
-              const geoCoords = ref.current.toGeoCoords(cartesianCoords);
-
-              ref.current.pointOfView(geoCoords, 700);
-
-              setGuesses((prev) => [...prev, text]);
-            }
-
-            setText("");
-          }}
-        >
-          submit
-        </button>
+          <CommandList className={search.length > 2 ? "" : "hidden"}>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup>
+              {Array.from(countryMap.keys()).map((country) => (
+                <CommandItem key={country} value={country} onSelect={onSelect}>
+                  {country}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
       </div>
       <ReactGlobe
         ref={ref}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-day.jpg"
-        // backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+        backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         lineHoverPrecision={0}
         polygonsData={worldGeoData.features}
         polygonAltitude={(d) =>
