@@ -17,7 +17,6 @@ import {
   CommandItem,
   CommandList,
 } from "./components/ui/command";
-import { motion } from "framer-motion";
 
 const MAX_DISTANCE_BETWEEN_COUNTRIES = 20000;
 const MAX_LONGEST_DISTANCE = 8000;
@@ -120,7 +119,7 @@ export const Globe = () => {
       </div>
       <ReactGlobe
         ref={ref}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-day.jpg"
+        globeImageUrl="/earth-day.webp"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         lineHoverPrecision={0}
         polygonsData={worldGeoData.features}
