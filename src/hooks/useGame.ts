@@ -35,11 +35,11 @@ export const useGame = () => {
 
         const normalizedDistance = Math.floor(distance);
         setGuesses((prev) => [
-          ...prev,
           {
             country,
             distance: normalizedDistance,
           },
+          ...prev,
         ]);
       }
     },

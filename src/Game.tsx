@@ -66,7 +66,7 @@ export const Game = () => {
     <div className="h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl h-full rounded-md overflow-hidden">
         <div className="flex h-full gap-4">
-          <div className="w-1/2 relative flex-1 overflow-hidden rounded-md shadow-lg bg-white">
+          <div className="w-2/3 relative flex-1 overflow-hidden rounded-md shadow-lg bg-white">
             <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse"></div>
             <div
               className="h-full flex items-center justify-center p-4"
@@ -83,7 +83,7 @@ export const Game = () => {
             </div>
           </div>
 
-          <div className="w-1/2 flex flex-col gap-4">
+          <div className="w-1/3 flex flex-col gap-4">
             <div className="bg-white rounded-md p-4 shadow-md flex flex-col">
               <h2 className="text-xl font-semibold mb-2 flex items-center">
                 <InfoCircledIcon className="mr-2 text-gray-500" /> Game Rules
