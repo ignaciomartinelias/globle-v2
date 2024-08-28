@@ -1,14 +1,10 @@
 import { MutableRefObject, useLayoutEffect } from "react";
 import ReactGlobe, { GlobeMethods } from "react-globe.gl";
-import * as d3 from "d3";
 
 import { Feature, Guess } from "./types";
 
-import { MAX_DISTANCE_BETWEEN_COUNTRIES } from "./consts";
 import { getDistanceBetweenCountries } from "./utils/getDistanceBetweenCountries";
-
-const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
-colorScale.domain([MAX_DISTANCE_BETWEEN_COUNTRIES, 0]);
+import { colorScale } from "./lib/colorScale";
 
 export const Globe = ({
   dimensions,
