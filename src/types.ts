@@ -24,3 +24,5 @@ export type WorldGeoData = {
   type: "FeatureCollection";
   features: Feature[];
 };
+
+export type Guess = { country: Feature; distance: number };
