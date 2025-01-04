@@ -13,6 +13,8 @@ export const useGame = () => {
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const globeRef = useRef<GlobeMethods>();
 
+  console.log({ worldGeoData });
+
   const countriesMap = useMemo(() => {
     const map = new Map<string, Feature>();
     worldGeoData.features.forEach((feature) => {
