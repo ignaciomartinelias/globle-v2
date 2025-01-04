@@ -17,7 +17,7 @@ export const useGame = () => {
 
   const countriesMap = useMemo(() => {
     const map = new Map<string, Feature>();
-    worldGeoData.features.forEach((feature) => {
+    worldGeoData?.features.forEach((feature) => {
       map.set(feature.properties.name, feature);
     });
     return map;
