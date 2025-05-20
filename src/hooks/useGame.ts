@@ -8,12 +8,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GlobeMethods } from "react-globe.gl";
 
 export const useGame = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const { data: worldGeoData } = useWorldGeoDataQuery();
   const [countryToGuess, setCountryToGuess] = useState<Feature>();
   const [guesses, setGuesses] = useState<Guess[]>([]);
   const globeRef = useRef<GlobeMethods>();
-
-  console.log({ worldGeoData });
 
   const countriesMap = useMemo(() => {
     const map = new Map<string, Feature>();
@@ -57,5 +56,18 @@ export const useGame = () => {
     }
   }, [worldGeoData]);
 
-  return { countriesMap, guesses, onSelectCountry, globeRef, countryToGuess };
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+  }, [setIsLoading]);
+
+  return {
+    countriesMap,
+    guesses,
+    onSelectCountry,
+    globeRef,
+    countryToGuess,
+    isLoading,
+  };
 };

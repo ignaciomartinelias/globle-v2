@@ -29,11 +29,21 @@ export const Globe = ({
   };
 
   useLayoutEffect(() => {
-    globeRef.current?.pointOfView({ altitude: 3.5 });
-    if (containerRef.current) {
-      setDimensions(containerRef.current.getBoundingClientRect());
-    }
-  }, [globeRef]);
+    if (!containerRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      if (containerRef.current) {
+        setDimensions(containerRef.current.getBoundingClientRect());
+      }
+    });
+
+    observer.observe(containerRef.current);
+    setDimensions(containerRef.current.getBoundingClientRect());
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <div

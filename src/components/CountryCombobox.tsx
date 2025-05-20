@@ -13,11 +13,13 @@ import { cn } from "@/lib/utils";
 type Props = {
   onSelectCountry: (country: string) => void;
   countryList: string[];
+  disabled?: boolean;
 };
 
 export const CountryCombobox: FC<Props> = ({
   onSelectCountry,
   countryList,
+  disabled,
 }) => {
   const [search, setSearch] = useState("");
 
@@ -39,6 +41,8 @@ export const CountryCombobox: FC<Props> = ({
         placeholder="Search country..."
         value={search}
         onValueChange={setSearch}
+        autoFocus
+        disabled={disabled}
       />
 
       <CommandList
