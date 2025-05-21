@@ -34,12 +34,12 @@ export const Game = () => {
           <Rules />
           <div className=" p-4 flex-1 flex flex-col  overflow-hidden bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-lg border border-blue-100">
             <CountryCombobox
-              countryList={Array.from(countriesMap.keys())}
+              countryList={Array.from(countriesMap.keys()).filter((c) =>
+                guesses.every((guess) => guess.country.properties.name !== c)
+              )}
               onSelectCountry={onSelectCountry}
               disabled={guesses.some(
-                (guess) =>
-                  guess.country.properties.name ===
-                  countryToGuess?.properties.name
+                (guess) => guess.country === countryToGuess
               )}
             />
             <GuessList guesses={guesses} countryToGuess={countryToGuess} />
